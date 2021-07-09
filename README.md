@@ -1,3 +1,3 @@
 # toolbox
 
-Tool om koelvermogen te berekenenn aan de hand van buiten temperatuur. 
+Tool om koelvermogen te berekenenn aan de hand van buitentemperatuur. 
