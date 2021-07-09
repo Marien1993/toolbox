@@ -1,16 +1,17 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
+import sys
 from CoolProp.HumidAirProp import HAPropsSI as lucht
 koelen = []
 verwarmen = []
 temp = []
 
-temp_uit = 18 #streeftemperatuur
-RH_in = 0.7 #relatief in %
-RH_uit = 0.7 #relatief uit %
-debiet = 29400 #m3/h
-referentie_jaar = "2018"
+temp_uit = int(sys.argv[4]) #streeftemperatuur
+RH_in = float(sys.argv[2]) #relatief in %
+RH_uit = float(sys.argv[3]) #relatief uit %
+debiet = int(sys.argv[1]) #m3/h
+referentie_jaar = sys.argv[5]
 
 date_cols = ["DATE"]
 weer = pd.read_csv("weerdatapunten.csv", index_col='DATE', parse_dates=date_cols)
@@ -44,6 +45,7 @@ def plot_grafiek(koelen, temp):
     ax1.set_ylabel('koelvermogen [kW]', color=color)
     ax1.plot(koelen, label='koelvermogen', color=color)
     ax1.tick_params(axis='y')
+
     ax2 = ax1.twinx()
 
     color = 'tab:blue'
@@ -53,15 +55,13 @@ def plot_grafiek(koelen, temp):
 
     fig.tight_layout()
     plt.legend()
-    plt.show()
+    plt.savefig('plots/plot.png')
 
 def vermogen_berekenen(lijst):
     for x in lijst:
         RH = x[1] / 100
-        print(x[0])
         temp.append(x[0])
         vermogen = round(vermogen_koelblok(x[0], temp_uit, RH, debiet, RH_uit), 3)
-        print(vermogen)
         if vermogen < 0:
             vermogen = 0
         koelen.append(vermogen)
